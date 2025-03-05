@@ -61,16 +61,18 @@ By default, daily logs are stored in the `/var/lib/readyset` directory.
 
 ```
 $ ls -lh /var/lib/readyset/*log*
+
 -rw-r--r-- 1 readyset readyset 143K Feb 27 16:45 readyset.log.2025-02-27
 -rw-r--r-- 1 readyset readyset 8.9K Feb 28 18:51 readyset.log.2025-02-28
 -rw-r--r-- 1 readyset readyset  68K Mar  1 18:59 readyset.log.2025-03-01
 -rw-r--r-- 1 readyset readyset  13K Mar  2 10:18 readyset.log.2025-03-02
 ```
 
-This is configurable via the `LOG_PATH` variable.
+This logging is configurable via the `LOG_PATH` and `LOG_ROTATION variables, which can be fond in the Readyset configuration file, generally found in `/etc/readyset/readyset.conf`.
 
 ```
-sudo grep ^LOG  /etc/readyset/readyset.conf
+$ sudo grep ^LOG  /etc/readyset/readyset.conf
+
 LOG_PATH=/var/lib/readyset
 LOG_ROTATION=daily
 ```

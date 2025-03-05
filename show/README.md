@@ -1,6 +1,6 @@
 # Readyset SHOW Commands
 
-When connected to a Readyset cache, a number of `SHOW` commands can be used to retrieve meta information. [Documentation](https://readyset.io/docs/reference/command-reference#show)
+When connected to a Readyset cache, a number of `SHOW` commands can be used to retrieve meta information. [Readyset Command Documentation](https://readyset.io/docs/reference/command-reference#show)
 
 If you are reviewing a Readyset cache setup, the following statements provide an overview of the setup, configuration and operation.
 
@@ -14,21 +14,22 @@ SHOW CACHES;
 SHOW PROXIED QUERIES;
 ```
 
-After initial operation, there are additional syntax that is useful for cache management.
+After initial operations which execute queries, data is loaded and caches are created, there are additional arguments for syntax that is useful for cache management.
 
 ```
 SHOW PROXIED SUPPORTED QUERIES;
 SHOW READYSET ALL TABLES;
+SHOW CACHES;
 ```
 
-There are additional `SHOW` commands that apply in certain operations and by default require arguments or prior statements.
+There are additional `SHOW` commands that apply in certain operations and may require arguments for correct execution.
 
 ```
 SHOW MIGRATION STATUS {ID}
 ```
 
 
-## Version
+## Readyset Version
 
 ```
 readyset@127.0.0.1 (imdb) [21:04:54] > SHOW READYSET VERSION;
@@ -45,7 +46,7 @@ readyset@127.0.0.1 (imdb) [21:04:54] > SHOW READYSET VERSION;
 6 rows in set (0.00 sec)
 ```
 
-## Status
+## Readyset Status
 
 ```
 readyset@127.0.0.1 (imdb) [21:04:58] > SHOW READYSET STATUS;
@@ -62,7 +63,7 @@ readyset@127.0.0.1 (imdb) [21:04:58] > SHOW READYSET STATUS;
 6 rows in set (5.00 sec)
 ```
 
-## Adapter
+## Readyset Adapter
 
 ```
 readyset@127.0.0.1 (imdb) [21:05:56] > SHOW READYSET STATUS ADAPTER;
@@ -80,7 +81,7 @@ readyset@127.0.0.1 (imdb) [21:05:56] > SHOW READYSET STATUS ADAPTER;
 7 rows in set (0.05 sec)
 ```
 
-## Connections
+## Readyset Connections
 
 ```
 readyset@127.0.0.1 (imdb) [21:06:05] > SHOW CONNECTIONS;
@@ -92,8 +93,7 @@ readyset@127.0.0.1 (imdb) [21:06:05] > SHOW CONNECTIONS;
 1 row in set (0.00 sec)
 ```
 
-
-## Tables
+## Readyset Tables
 
 Unless configured on startup, by default no Tables will be present in the cache.
 
@@ -102,15 +102,14 @@ readyset@127.0.0.1 (imdb) [09:39:53] > SHOW READYSET TABLES;
 Empty set (0.00 sec)
 ```
 
-## Caches
+## Readyset Caches
 
 ```
 readyset@127.0.0.1 (imdb) [09:39:18] > SHOW CACHES;
 Empty set (0.02 sec)
 ```
 
-## Queries
-
+## Readyset Queries
 
 ```
 readyset@127.0.0.1 (imdb) [09:39:18] > SHOW PROXIED QUERIES;
@@ -122,17 +121,17 @@ readyset@127.0.0.1 (imdb) [09:39:18] > SHOW PROXIED QUERIES;
 +--------------------+----------------+--------------------+-------+
 ```
 
-## Supported Queries
+## Supported Readyset Queries
 
 ```
 readyset@127.0.0.1 (imdb) [18:31:23] > SHOW PROXIED SUPPORTED QUERIES;
 Empty set (0.00 sec)
 ```
 
-## Tables in Use by ReadSet
+## Tables available for use with Readyset
 
-When tables are added they will move from `Snapshotting` to `Snapshotted`.
-`description` is always empty in with this syntax.
+When tables are added via the `ALTER READYSET ADD TABLE` command they will be listed, and the status will move from `Snapshotting` to `Snapshotted`.
+The `description` column is empty with this syntax.
 
 ```
 readyset@127.0.0.1 (imdb) [18:45:01] > SHOW READYSET TABLES;
@@ -147,13 +146,15 @@ readyset@127.0.0.1 (imdb) [18:45:01] > SHOW READYSET TABLES;
 4 rows in set (0.01 sec)
 ```
 
-## Queries available for the cache
+## Queries available for caching
 
-As queries are executed they will show up with one of the following `readyset supported` states:
+As queries are executed they will show up with one of the following states in the `readyset supported` column.
 
 - unsupported
 - pending
 - yes
+
+NOTE: A number of commands including `SHOW`, `DESC` and `SELECT with no FROM` are also listed.
 
 ```
 readyset@127.0.0.1 (imdb) [09:57:50] >  SHOW PROXIED QUERIES;
@@ -166,7 +167,9 @@ readyset@127.0.0.1 (imdb) [09:57:50] >  SHOW PROXIED QUERIES;
 +--------------------+------------------------------------------+--------------------+-------+
 ```
 
-As your list of parsed queries grows you will want to to use the `SUPPORTED` keyword.
+Each proxied query will have a `query id` column that can be used later for caching.
+
+As your list of parsed queries grows you will want to to use the additional `SUPPORTED` keyword to show a smaller list of SQL statements.
 
 ```
 readyset@127.0.0.1 (imdb) [10:17:26] > SHOW PROXIED SUPPORTED QUERIES;
@@ -179,7 +182,7 @@ readyset@127.0.0.1 (imdb) [10:17:26] > SHOW PROXIED SUPPORTED QUERIES;
 2 rows in set (0.00 sec)
 ```
 
-## All Tables
+## All available database tables
 
 You cannot limit the output of this command if you hae 1,000s of databases across all schemas.
 
