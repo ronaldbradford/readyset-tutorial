@@ -2,28 +2,8 @@
 
 These instructions apply to a running ReadySet server on an Debian system. See [Install Readyset System Packages](https://readyset.io/docs/get-started/install-rs/binaries/install-package) for more information.
 
-The output in this tutorial is from an Ubuntu 22.04 installation.
+The output in this tutorial is from an **Ubuntu 22.04** installation.
 
-```
-$ uname -a
-
-Linux picard 6.8.0-51-generic #52~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Dec  9 15:00:52 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
-
-$ cat /etc/os-release
-
-PRETTY_NAME="Ubuntu 22.04.1 LTS"
-NAME="Ubuntu"
-VERSION_ID="22.04"
-VERSION="22.04.1 LTS (Jammy Jellyfish)"
-VERSION_CODENAME=jammy
-ID=ubuntu
-ID_LIKE=debian
-HOME_URL="https://www.ubuntu.com/"
-SUPPORT_URL="https://help.ubuntu.com/"
-BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
-PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
-UBUNTU_CODENAME=jammy
-```
 
 ## Starting the service
 
@@ -68,7 +48,7 @@ $ ls -lh /var/lib/readyset/*log*
 -rw-r--r-- 1 readyset readyset  13K Mar  2 10:18 readyset.log.2025-03-02
 ```
 
-This logging is configurable via the `LOG_PATH` and `LOG_ROTATION variables, which can be fond in the Readyset configuration file, generally found in `/etc/readyset/readyset.conf`.
+This logging is configurable via the `LOG_PATH` and `LOG_ROTATION` variables, which can be fond in the Readyset configuration file `/etc/readyset/readyset.conf`.
 
 ```
 $ sudo grep ^LOG  /etc/readyset/readyset.conf
@@ -77,4 +57,36 @@ LOG_PATH=/var/lib/readyset
 LOG_ROTATION=daily
 ```
 
+For reviewing the log interactively.
 
+```
+$ sudo tail -f /var/lib/readyset/readyset.log.$(date +%Y-%m-%d)
+```
+
+NOTE: Logs are written in UTC time, this command needs to be updated daily.
+
+## Demo System Setup
+
+```
+$ date
+Wed Mar 12 12:37:02 PM EDT 2025
+
+$ uname -a
+
+Linux picard 6.8.0-51-generic #52~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Dec  9 15:00:52 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+$ cat /etc/os-release
+
+PRETTY_NAME="Ubuntu 22.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.1 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+```
