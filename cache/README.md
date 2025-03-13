@@ -2,12 +2,12 @@
 
 Readyset operates by managing a cache of queries that you configure. Under the covers, Readyset manages a set of tables that are kept in sync by subscribing to the respective streams of changes from the database.  This is the MySQL binary log replication or the PostgreSQL logical WAL.
 
-When you are connected to a Readyset cache, all queries are passed to the target database. When first installed Readyset is effectively a pass-through cache for your SQL statements.
+When you are connected to a Readyset cache, all queries are passed to the target database. When first installed Readyset is effectively a pass-through proxy for all of your SQL statements.
 
-## Seeing cachable queries
+## Reviewing cacheable queries
 
 As queries are executed, Readyset will capture these and you can view them using the `SHOW PROXIED QUERIES` command.
-You can also start with the `SHOW PROXIED SUPPORTED QUERIES` during an introduction to simplify demonstrating the caching capabilities.
+You can also start with the `SHOW PROXIED SUPPORTED QUERIES` to simplify demonstrating the caching capabilities.
 
 ```
 readyset@127.0.0.1 (imdb) [13:58:18] > SHOW PROXIED SUPPORTED QUERIES\G
@@ -29,9 +29,15 @@ readyset supported: yes
 3 rows in set (0.00 sec)
 ```
 
-## Determining if a query is cachable
+The `readyset support` column can contain a number of values including:
+- `yes`
+- `pending`
+- `unsupported`
 
-In addition to queries that you execute and are listed as `readyset supported`, you can manually validate and SQL statement using the `EXPLAIN CREATE CACHE FROM <sql>` command.
+
+## Determining if a query is cacheable
+
+In addition to queries that you execute and are listed as `readyset supported`, you can manually validate an SQL statement using the `EXPLAIN CREATE CACHE FROM <sql>` command.
 
 ```
 EXPLAIN CREATE CACHE FROM SELECT name FROM name WHERE died = 1999;
@@ -45,9 +51,15 @@ EXPLAIN CREATE CACHE FROM SELECT name FROM name WHERE died = 1999;
 
 ## Caching a query
 
-You can specify the query, the query digest or the query id when caching a query.
+There are 3 different syntax options to cache a query with `CREATE CACHE FROM`. You can:
+- specify the query
+- the query digest
+- the query id
 
 ### Query id
+
+In the `SHOW PROXIED QUERIES` output there is `query id` column which can be used.
+
 ```
 CREATE CACHE FROM q_4c0ebd40f712c210;
 Query OK, 0 rows affected (9.01 sec)
@@ -56,12 +68,18 @@ Query OK, 0 rows affected (9.01 sec)
 NOTE: This is a blocking statement, so a query that is being cached may take some time. You can monitor the progress via the [Readyset Log](../log/README.md).
 
 ### Query statement
+
+You can create a cached query by specifying the SQL query directly.
+
 ```
 CREATE CACHE FROM SELECT name FROM name WHERE died = 1999;
 Query OK, 0 rows affected (4.70 sec)
 ```
 
 ### Query digest
+
+You can use a query digest, such as the value of `query` from the `SHOW PROXIED QUERIES` command.
+
 ```
 CREATE CACHE FROM SELECT * FROM `name` WHERE (`name` = $1);
 ```
@@ -73,13 +91,13 @@ readyset@127.0.0.1 (imdb) [11:16:14] > CREATE CACHE FROM SELECT * FROM `name` WH
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-## the evolution of the SQL syntax
+## The evolution of the SQL syntax in a query
 
-As a query moves from initial execution, to proxied, to cached, you will observe the parsing syntax of the query will change to be more specific.
+As a query moves from initial execution, to a proxied query, to a cached query, you will observe the parsing syntax of the query will change to be more specific.
 
 ### Executed
 
-For example, a simple SQL statement to view a row of data.
+For example, a simple SQL statement to view a row of data would be executed as:
 
 ```
 SELECT * FROM name WHERE name = 'Tom Hanks';
@@ -87,7 +105,7 @@ SELECT * FROM name WHERE name = 'Tom Hanks';
 
 ### Proxied
 
-When proxied this SQL statement is converted to a digest for parameters.
+When proxied this SQL statement is converted to a digest for parameters values and would appear in `SHOW PROXIED QUERIES` as.
 
 ```
 SELECT * FROM `name` WHERE (`name` = $1)
@@ -95,16 +113,20 @@ SELECT * FROM `name` WHERE (`name` = $1)
 
 ### Cached
 
-When cached this SQL statement is fully qualified using schema, table and column name to specify all relations of the query.
+When cached this SQL statement is fully qualified using schema, table and column names to specify all relations used in the query. In the `SHOW CACHES` a query would appear as.
 
 ```
 SELECT `imdb`.`name`.`name_id`, `imdb`.`name`.`nconst`, `imdb`.`name`.`name`, `imdb`.`name`.`born`, `imdb`.`name`.`died`, `imdb`.`name`.`updated` FROM `imdb`.`name` WHERE (`imdb`.`name`.`name` = $1)
 ```
 
-NOTE: In the ReadySet Cloud product these queries are formatted in a more readable format. What is shown here is the client output.
+<div style="border: 2px solid red; padding: 10px; background-color: #ffcccc; color: red;">
+**NOTE:** In the ReadySet Cloud product these queries are formatted in a more readable format. What is shown here is the client output of queries specified on a single line for ease of use.
+</div>
 
 
 ## Cached Queries
+
+All cached queries can be seen via the `SHOW CACHES` command.
 
 ```
 readyset@127.0.0.1 (imdb) [14:08:38] > SHOW CACHES\G
@@ -130,6 +152,8 @@ fallback behavior: fallback allowed
 
 
 ## Caching concurrently functionality
+
+A feature that enables you to create a cache asynchronously is to use the `CONCURRENTLY` keyword. You can then use the `SHOW READYSET MIGRATION STATUS` command to monitor this cache creation.
 
 ```
 readyset@127.0.0.1 (imdb) [18:42:36] > CREATE CACHE CONCURRENTLY FROM q_79aaa346e2d7e34b;
