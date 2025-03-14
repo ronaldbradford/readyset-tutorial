@@ -34,9 +34,7 @@ A number of `SHOW` commands are available to view information about your Readyse
 
 # 3. Caching Queries in Readyset
 
-After the installation and configuration of Readyset, with a dataset and example SQL statements you can start caching supported queries. See [Caching](caching/README.md) for several examples.
-
-See the commands to start, stop, monitor and configure Readyset in the [Server Commands](server/README.md).
+After the installation and configuration of Readyset, with a dataset and example SQL statements you can start caching supported queries. See [Caching](cache/README.md) for several examples.
 
 <div style="border: 2px solid green; padding: 10px; background-color: #ccffcc; color: green;">
   Cached queries provide a much higher lower latency and higher throughput of your SQL statements, and also reduces load on your database server.
@@ -46,7 +44,11 @@ See the commands to start, stop, monitor and configure Readyset in the [Server C
 
 Queries in Readyset are extremely fast. Validating Readyset with the traditional `mysql` client is often not possible. See [Monitoring](monitor/README.md) for different strategies to monitor and track the performance of your application SQL with Readyset.
 
-
 # 5. Readyset Management
 
 For the commands to start, stop, monitor and configure Readyset, see the [Server Commands](server/README.md) documentation.
+
+# Additional References
+- [ReadySet Documentation](https://readyset.io/docs)
+- [Getting Started with Readyset on MySQL!](https://readyset.io/blog/your-first-steps-with-readyset-and-mysql-are-here)
+- [Getting started with Readyset on PostgreSQL](https://readyset.io/blog/getting-started-with-readyset-on-postgresql)
