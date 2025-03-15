@@ -1,4 +1,4 @@
-# Readyset Tutorials
+# A Readyset Tutorial
 
 This repository provides several reproducible cut/paste tutorials to demonstrate the functionality for [Readyset](https://readyset.io). Readyset the next-generation caching product providing caching support for [MySQL](https://www.mysql.com) and [PostgreSQL](https://postgres.org) databases with no application code changes and no cache invalidation requirements.
 
